@@ -10,6 +10,9 @@ internal abstract class Program
 {
     static async Task Main()
     {
+        Auth.SetToken("test");
+        await Auth.Verify();
+        
         var r2 = R2.Get("hyzen-temporary");
         
         var result1 = await r2.DeleteObject("cf0e305e-fcd6-43dd-9369-814011f39a3b.pdf");

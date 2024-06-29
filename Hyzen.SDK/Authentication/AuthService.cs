@@ -9,19 +9,19 @@ public static class AuthService
 {
     private const string Url = "http://localhost:5209";
     
-    public static AuthSubject Verify(string token)
+    public static async Task<AuthSubject> Verify(string token)
     {
         using HttpClient client = new();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Add("Authorization", token);
         
         client.BaseAddress = new Uri(Url);
         
-        var response = client.PostAsync("/api/v1/Auth/Verify", null).Result;
+        var response = await client.PostAsync("/api/v1/Auth/Verify", null);
         
         if (!response.IsSuccessStatusCode)
             throw new HException("[Hyzen Auth] Invalid token", ExceptionType.InvalidCredentials);
         
-        var subject = response.Content.ReadAsStringAsync().Result;
+        var subject = await response.Content.ReadAsStringAsync();
         
         return JsonConvert.DeserializeObject<AuthSubject>(subject);
     }

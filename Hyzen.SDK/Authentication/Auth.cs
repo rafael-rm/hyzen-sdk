@@ -15,43 +15,43 @@ public class Auth
         return Token.Value;
     }
     
-    public static AuthSubject GetSubject()
+    public static async Task<AuthSubject> GetSubject()
     {
         if (Subject.Value == null)
-            Subject.Value = Verify();
+            return await Verify();
         
         return Subject.Value;
     }
     
-    public static AuthSubject Verify(string token)
+    public static async Task<AuthSubject> Verify(string token)
     {
-        return AuthService.Verify(token);
+        return await AuthService.Verify(token);
     }
     
-    public static AuthSubject Verify()
+    public static async Task<AuthSubject> Verify()
     {
-        return AuthService.Verify(GetToken());
+        return await AuthService.Verify(GetToken());
     }
     
-    public static bool HasRole(string roleKey)
+    public static async Task<bool> HasRole(string roleKey)
     {
-        return GetSubject().HasRole(roleKey);
+        return (await GetSubject()).HasRole(roleKey);
     }
     
-    public static bool HasGroup(string groupKey)
+    public static async Task<bool> HasGroup(string groupKey)
     {
-        return GetSubject().HasGroup(groupKey);
+        return (await GetSubject()).HasGroup(groupKey);
     }
     
-    public static void EnsureRole(string roleKey)
+    public static async Task EnsureRole(string roleKey)
     {
-        if (!HasRole(roleKey))
+        if (!await HasRole(roleKey))
             throw new HException($"[Hyzen Auth] Role '{roleKey}' is required", ExceptionType.PermissionRequired);
     }
     
-    public static void EnsureGroup(string groupKey)
+    public static async Task EnsureGroup(string groupKey)
     {
-        if (!HasGroup(groupKey))
+        if (!await HasGroup(groupKey))
             throw new HException($"[Hyzen Auth] Group '{groupKey}' is required", ExceptionType.PermissionRequired);
     }
 }
