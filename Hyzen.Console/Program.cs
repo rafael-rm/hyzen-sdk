@@ -10,8 +10,8 @@ internal abstract class Program
 {
     static async Task Main()
     {
-        Auth.SetToken("test");
-        await Auth.Verify();
+        HyzenAuth.SetToken("test");
+        var subject = await HyzenAuth.GetSubject();
         
         var r2 = R2.Get("hyzen-temporary");
         

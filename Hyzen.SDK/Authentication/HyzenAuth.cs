@@ -3,34 +3,40 @@ using Hyzen.SDK.Exception;
 
 namespace Hyzen.SDK.Authentication;
 
-public class Auth
+public class HyzenAuth
 {
     private static readonly AsyncLocal<string> Token = new();
     private static readonly AsyncLocal<AuthSubject> Subject = new();
 
-    public static void SetToken(string token) => Token.Value = token;
-    
     public static string GetToken()
     {
         return Token.Value;
     }
     
+    public static void SetToken(string token)
+    {
+        Token.Value = token;
+    }
+    
+    private static async Task<AuthSubject> Verify()
+    {
+        return await AuthService.Verify(GetToken());
+    }
+    
     public static async Task<AuthSubject> GetSubject()
     {
         if (Subject.Value == null)
-            return await Verify();
-        
+            Subject.Value = await Verify();
+
         return Subject.Value;
     }
     
-    public static async Task<AuthSubject> Verify(string token)
+    public static async Task EnsureAuthenticated()
     {
-        return await AuthService.Verify(token);
-    }
-    
-    public static async Task<AuthSubject> Verify()
-    {
-        return await AuthService.Verify(GetToken());
+        if (string.IsNullOrWhiteSpace(GetToken()))
+            throw new HException("[Hyzen Auth] Token is required", ExceptionType.InvalidCredentials);
+        
+        await GetSubject();
     }
     
     public static async Task<bool> HasRole(string roleKey)
