@@ -1,4 +1,5 @@
 ﻿using Hyzen.SDK.Authentication;
+using Hyzen.SDK.Authentication.DTO;
 using Hyzen.SDK.Cloudflare;
 using Hyzen.SDK.PdfGenerator;
 using Hyzen.SDK.PdfGenerator.DTO.Pdf;
@@ -10,6 +11,25 @@ internal abstract class Program
 {
     static async Task Main()
     {
+        
+        var subjectTest = new AuthSubject
+        {
+            Roles = new List<string>
+            {
+                "hyzen_auth:user:manage_group",
+            }
+        };
+
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth"));
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth:user"));
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth:user:manage_group"));
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth:admin"));
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth:admin:manage"));
+        System.Console.WriteLine(subjectTest.HasRole("hyzen_auth:user:teste"));
+        System.Console.WriteLine(subjectTest.HasRole("other_auth:user:view"));
+        System.Console.WriteLine(subjectTest.HasRole("other_auth:user:manage"));
+        
+        
         HyzenAuth.SetToken("test");
         var subject = await HyzenAuth.GetSubject();
         
