@@ -19,7 +19,7 @@ public static class AuthService
         var response = await client.PostAsync("/api/v1/Auth/Verify", null);
         
         if (!response.IsSuccessStatusCode)
-            throw new HException("[Hyzen Auth] Invalid token", ExceptionType.InvalidCredentials);
+            throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
         
         var subject = await response.Content.ReadAsStringAsync();
         

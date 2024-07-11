@@ -31,10 +31,15 @@ public class HyzenAuth
         return Subject.Value;
     }
     
+    public static void SetSubject(AuthSubject subject)
+    {
+        Subject.Value = subject;
+    }
+    
     public static async Task EnsureAuthenticated()
     {
         if (string.IsNullOrWhiteSpace(GetToken()))
-            throw new HException("[Hyzen Auth] Token is required", ExceptionType.InvalidCredentials);
+            throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
         
         await GetSubject();
     }
@@ -52,12 +57,12 @@ public class HyzenAuth
     public static async Task EnsureRole(string roleKey)
     {
         if (!await HasRole(roleKey))
-            throw new HException($"[Hyzen Auth] Role '{roleKey}' is required", ExceptionType.PermissionRequired);
+            throw new HException($"Role '{roleKey}' is required for this action", ExceptionType.PermissionRequired);
     }
     
     public static async Task EnsureGroup(string groupKey)
     {
         if (!await HasGroup(groupKey))
-            throw new HException($"[Hyzen Auth] Group '{groupKey}' is required", ExceptionType.PermissionRequired);
+            throw new HException($"Group '{groupKey}' is required for this action", ExceptionType.PermissionRequired);
     }
 }
