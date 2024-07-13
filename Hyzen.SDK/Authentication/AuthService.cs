@@ -7,10 +7,13 @@ namespace Hyzen.SDK.Authentication;
 
 public static class AuthService
 {
-    private const string Url = "http://localhost:5209";
+    private const string Url = "https://hyzen-auth.azurewebsites.net";
     
     public static async Task<AuthSubject> Verify(string token)
     {
+        if (string.IsNullOrEmpty(token))
+            throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
+        
         using HttpClient client = new();
         client.DefaultRequestHeaders.Add("Authorization", token);
         
