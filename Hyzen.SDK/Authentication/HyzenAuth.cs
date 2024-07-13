@@ -65,4 +65,14 @@ public class HyzenAuth
         if (!await HasGroup(groupKey))
             throw new HException($"Group '{groupKey}' is required for this action", ExceptionType.PermissionRequired);
     }
+    
+    public static async Task<bool> IsAdmin()
+    {
+        return await HasGroup("Admin");
+    }
+    
+    public static Task EnsureAdmin()
+    {
+        return EnsureGroup("Admin");
+    }
 }
