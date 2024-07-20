@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Hyzen.SDK.Authentication.DTO;
 using Hyzen.SDK.Exception;
+using Newtonsoft.Json;
 
 namespace Hyzen.SDK.Authentication.Services;
 
@@ -25,6 +26,6 @@ public class AuthService : IAuthService
         
         var subject = await response.Content.ReadAsStringAsync();
         
-        return JsonSerializer.Deserialize<AuthSubject>(subject);
+        return JsonConvert.DeserializeObject<AuthSubject>(subject);
     }
 }
