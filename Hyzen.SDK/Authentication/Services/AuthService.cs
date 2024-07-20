@@ -1,20 +1,19 @@
-﻿using System.Net.Http.Headers;
-using Hyzen.SDK.Authentication.DTO;
+﻿using Hyzen.SDK.Authentication.DTO;
 using Hyzen.SDK.Exception;
 using Newtonsoft.Json;
 
-namespace Hyzen.SDK.Authentication;
+namespace Hyzen.SDK.Authentication.Services;
 
-public static class AuthService
+public class AuthService : IAuthService
 {
     private const string Url = "https://hyzen-auth.azurewebsites.net";
     
-    public static async Task<AuthSubject> Verify(string token)
+    public async Task<AuthSubject> Verify(string token)
     {
         if (string.IsNullOrEmpty(token))
             throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
         
-        using HttpClient client = new();
+        using HttpClient client = new(); // TODO: Fix socket exhaustion
         client.DefaultRequestHeaders.Add("Authorization", token);
         
         client.BaseAddress = new Uri(Url);

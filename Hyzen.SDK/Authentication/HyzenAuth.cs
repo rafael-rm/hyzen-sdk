@@ -1,13 +1,20 @@
 ﻿using Hyzen.SDK.Authentication.DTO;
+using Hyzen.SDK.Authentication.Services;
 using Hyzen.SDK.Exception;
 
 namespace Hyzen.SDK.Authentication;
 
-public class HyzenAuth
+public static class HyzenAuth
 {
     private static readonly AsyncLocal<string> Token = new();
     private static readonly AsyncLocal<AuthSubject> Subject = new();
+    private static readonly IAuthService Service;
 
+    static HyzenAuth()
+    {
+        Service = new AuthService();
+    }
+    
     public static string GetToken()
     {
         return Token.Value;
@@ -20,7 +27,7 @@ public class HyzenAuth
     
     private static async Task<AuthSubject> Verify()
     {
-        return await AuthService.Verify(GetToken());
+        return await Service.Verify(GetToken());
     }
     
     public static async Task<AuthSubject> GetSubject()
