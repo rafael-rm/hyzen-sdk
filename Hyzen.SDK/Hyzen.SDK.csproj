@@ -21,8 +21,6 @@
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3" Version="3.7.310.6" />
-        <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.4.20"/>
-        <PackageReference Include="JsonConverter.Newtonsoft.Json" Version="0.6.0" />
     </ItemGroup>
 
 </Project>
