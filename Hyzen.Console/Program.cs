@@ -1,6 +1,7 @@
 ﻿using Hyzen.SDK.Authentication;
 using Hyzen.SDK.Authentication.DTO;
 using Hyzen.SDK.Cloudflare;
+using Hyzen.SDK.Email;
 
 namespace Hyzen.Console;
 
@@ -8,6 +9,14 @@ internal abstract class Program
 {
     static async Task Main()
     {
+        var dynamicTemplateData = new
+        {
+            displayName = "Tester",
+            recoveryUrl = "https://hyzen.com.br/"
+        };
+        
+        var x = await HyzenMail.SendTemplateMail("noreply@hyzen.com.br", "rafael.rmo@outlook.com", "d-22d1b8b0c8df4ce9ae516cf171a1fa58", dynamicTemplateData);
+        
         var subjectTest = new AuthSubject
         {
             Roles = new List<string>
