@@ -28,9 +28,6 @@ public class SendGridService : IMailService
         var msg = MailHelper.CreateSingleTemplateEmail(gridFrom, gridTo, templateId, data);
         var response = await Client.SendEmailAsync(msg);
         
-        if (response.StatusCode != HttpStatusCode.Accepted)
-            throw new HException("Failed to send recovery email", ExceptionType.InvalidOperation);
-        
-        return true;
+        return response.StatusCode == HttpStatusCode.Accepted;
     }
 }
