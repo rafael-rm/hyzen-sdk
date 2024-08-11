@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Hyzen.SDK.Exception;
+using Hyzen.SDK.SecretManager;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -12,7 +13,7 @@ public class SendGridService : IMailService
     
     public SendGridService()
     {
-        ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        ApiKey = HyzenSecret.GetSecret("SENDGRID-API-KEY");
         
         if (string.IsNullOrWhiteSpace(ApiKey))
             throw new HException("SendGrid API key not found", ExceptionType.InvalidOperation);

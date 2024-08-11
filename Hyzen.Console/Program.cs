@@ -2,6 +2,7 @@
 using Hyzen.SDK.Authentication.DTO;
 using Hyzen.SDK.Cloudflare;
 using Hyzen.SDK.Email;
+using Hyzen.SDK.SecretManager;
 
 namespace Hyzen.Console;
 
@@ -9,6 +10,8 @@ internal abstract class Program
 {
     static async Task Main()
     {
+        var key = await HyzenSecret.GetSecretAsync("SENDGRID-API-KEY");
+        
         var dynamicTemplateData = new
         {
             displayName = "Tester",

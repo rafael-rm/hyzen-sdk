@@ -2,13 +2,15 @@
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Hyzen.SDK.SecretManager;
+
 namespace Hyzen.SDK.Cloudflare;
 
 public class R2
 {
-    private static readonly string AccessKey = Environment.GetEnvironmentVariable("CLOUDFLARE_ACCESS_KEY");
-    private static readonly string SecretKey = Environment.GetEnvironmentVariable("CLOUDFLARE_SECRET_KEY");
-    private static readonly string AccountId = Environment.GetEnvironmentVariable("CLOUDFLARE_ACCOUNT_ID");
+    private static readonly string AccessKey = HyzenSecret.GetSecret("CLOUDFLARE-ACCESS-KEY");
+    private static readonly string SecretKey = HyzenSecret.GetSecret("CLOUDFLARE-SECRET-KEY");
+    private static readonly string AccountId = HyzenSecret.GetSecret("CLOUDFLARE-ACCOUNT-ID");
     private static readonly string ServiceUrl = $"https://{AccountId}.r2.cloudflarestorage.com";
     private readonly AmazonS3Client _client;
     private static readonly Dictionary<string, R2> Instance = new();
