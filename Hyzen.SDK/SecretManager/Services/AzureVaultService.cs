@@ -22,7 +22,7 @@ public class AzureVaultService : ISecretService
             }
         };
         
-        Client = new SecretClient(new Uri("https://hyzen-vault-generic.vault.azure.net/"), new DefaultAzureCredential(), Options);
+        Client = new SecretClient(new Uri("https://hyzen-vault.vault.azure.net/"), new DefaultAzureCredential(), Options);
     }
     
     public async Task<string> GetSecret(string secretName)
