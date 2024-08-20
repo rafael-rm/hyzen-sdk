@@ -13,7 +13,7 @@ public class SendGridService : IMailService
     
     public SendGridService()
     {
-        ApiKey = HyzenSecret.GetSecret("SENDGRID-API-KEY");
+        ApiKey = HyzenSecret.GetSecret("HYZEN-SDK-SENDGRID-API-KEY");
         
         if (string.IsNullOrWhiteSpace(ApiKey))
             throw new HException("SendGrid API key not found", ExceptionType.InvalidOperation);

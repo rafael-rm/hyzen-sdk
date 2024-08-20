@@ -8,9 +8,9 @@ namespace Hyzen.SDK.Cloudflare;
 
 public class R2
 {
-    private static readonly string AccessKey = HyzenSecret.GetSecret("CLOUDFLARE-ACCESS-KEY");
-    private static readonly string SecretKey = HyzenSecret.GetSecret("CLOUDFLARE-SECRET-KEY");
-    private static readonly string AccountId = HyzenSecret.GetSecret("CLOUDFLARE-ACCOUNT-ID");
+    private static readonly string AccessKey = HyzenSecret.GetSecret("HYZEN-SDK-CLOUDFLARE-ACCESS-KEY");
+    private static readonly string SecretKey = HyzenSecret.GetSecret("HYZEN-SDK-CLOUDFLARE-SECRET-KEY");
+    private static readonly string AccountId = HyzenSecret.GetSecret("HYZEN-SDK-CLOUDFLARE-ACCOUNT-ID");
     private static readonly string ServiceUrl = $"https://{AccountId}.r2.cloudflarestorage.com";
     private readonly AmazonS3Client _client;
     private static readonly Dictionary<string, R2> Instance = new();

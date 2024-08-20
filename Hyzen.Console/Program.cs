@@ -10,7 +10,7 @@ internal abstract class Program
 {
     static async Task Main()
     {
-        var key = await HyzenSecret.GetSecretAsync("SENDGRID-API-KEY");
+        var key = await HyzenSecret.GetSecretAsync("HYZEN-SDK-SENDGRID-API-KEY");
         
         var dynamicTemplateData = new
         {
