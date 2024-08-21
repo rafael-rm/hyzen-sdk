@@ -3,6 +3,7 @@
 public class AuthSubject
 {
     public Guid Guid { get; set; } 
+    public SubjectType Type { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public List<string> Groups { get; set; } = [];
