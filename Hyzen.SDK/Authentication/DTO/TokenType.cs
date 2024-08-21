@@ -1,8 +1,8 @@
 ﻿namespace Hyzen.SDK.Authentication.DTO;
 
-public enum SubjectType
+public enum TokenType
 {
     User = 1,
     Application = 2,
-    RecoveryPassword = 3
+    Recovery = 3
 }
