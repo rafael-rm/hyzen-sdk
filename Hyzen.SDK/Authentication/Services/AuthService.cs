@@ -29,7 +29,7 @@ public class AuthService : IAuthService
         return JsonConvert.DeserializeObject<AuthSubject>(subject);
     }
 
-    public async Task<string> Login(string email, string password)
+    public async Task<LoginResponse> Login(string email, string password)
     {
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             throw new HException("Invalid email or password", ExceptionType.InvalidCredentials);
@@ -43,6 +43,6 @@ public class AuthService : IAuthService
         if (!response.IsSuccessStatusCode)
             throw new HException("Invalid email or password", ExceptionType.InvalidCredentials);
         
-        return await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
     }
 }
