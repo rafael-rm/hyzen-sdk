@@ -38,6 +38,12 @@ public static class HyzenAuth
         return Subject.Value;
     }
     
+    public static async Task<string> Login(string email, string password)
+    {
+        var token = await Service.Login(email, password);
+        return token;
+    }
+    
     public static void SetSubject(AuthSubject subject)
     {
         Subject.Value = subject;
