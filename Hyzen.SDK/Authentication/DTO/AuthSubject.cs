@@ -1,4 +1,6 @@
-﻿namespace Hyzen.SDK.Authentication.DTO;
+﻿using System.Security.Claims;
+
+namespace Hyzen.SDK.Authentication.DTO;
 
 public class AuthSubject
 {
@@ -10,27 +12,26 @@ public class AuthSubject
     
     public bool HasRole(string roleKey)
     {
-        var roleParts = roleKey.Split(':');
-        
-        if (Roles.Contains(roleKey))
-        {
-            return true;
-        }
-
-        for (int i = 0; i < roleParts.Length; i++)
-        {
-            var partialRole = string.Join(':', roleParts.Take(i + 1)) + ":*";
-            if (Roles.Contains(partialRole))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return Roles.Contains(roleKey);
     }
         
     public bool HasGroup(string groupKey)
     {
         return Groups.Contains(groupKey);
+    }
+    
+    public Claim[] ToClaims()
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, Guid.ToString()),
+            new(ClaimTypes.Name, Name),
+            new(ClaimTypes.Email, Email)
+        };
+        
+        claims.AddRange(Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        claims.AddRange(Groups.Select(group => new Claim(ClaimTypes.GroupSid, group)));
+
+        return claims.ToArray();
     }
 }
