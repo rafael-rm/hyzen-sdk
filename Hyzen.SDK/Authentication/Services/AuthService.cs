@@ -46,4 +46,36 @@ public class AuthService : IAuthService
         
         return JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<bool> SendRecoveryEmail(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            throw new HException("Invalid email", ExceptionType.InvalidCredentials);
+
+        using HttpClient client = new(); // TODO: Fix socket exhaustion
+        client.Timeout = TimeSpan.FromSeconds(10);
+        client.BaseAddress = new Uri(Url);
+    
+        var content = new FormUrlEncodedContent(new[]
+        {
+            new KeyValuePair<string, string>("email", email)
+        });
+
+        var response = await client.PostAsync("/api/v1/Auth/SendRecoveryEmail", content);
+
+        return response.IsSuccessStatusCode;
+    }
+
+
+    public async Task<bool> RecoverPassword(string email, string code, string newPassword)
+    {
+        using HttpClient client = new(); // TODO: Fix socket exhaustion
+        client.Timeout = TimeSpan.FromSeconds(10);
+        client.BaseAddress = new Uri(Url);
+        
+        var content = new StringContent(JsonConvert.SerializeObject(new { Email = email, VerificationCode = code, NewPassword = newPassword }), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("/api/v1/Auth/RecoverPassword", content);
+
+        return response.IsSuccessStatusCode;
+    }
 }

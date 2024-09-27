@@ -10,6 +10,9 @@ internal abstract class Program
 {
     static async Task Main()
     {
+        var s1 = await HyzenAuth.SendRecoveryEmail("rafael@hyzen.com.br");
+        var s2 = await HyzenAuth.RecoverPassword("rafael@hyzen.com.br", "123456", "123456");
+        
         var key = await HyzenSecret.GetSecretAsync("HYZEN-SDK-SENDGRID-API-KEY");
         
         var dynamicTemplateData = new

@@ -43,6 +43,16 @@ public static class HyzenAuth
         return await Service.Login(email, password);
     }
     
+    public static async Task<bool> SendRecoveryEmail(string email)
+    {
+        return await Service.SendRecoveryEmail(email);
+    }
+    
+    public static async Task<bool> RecoverPassword(string email, string code, string newPassword)
+    {
+        return await Service.RecoverPassword(email, code, newPassword);
+    }
+    
     public static void SetSubject(AuthSubject subject)
     {
         Subject.Value = subject;
