@@ -16,7 +16,6 @@ public class AuthService : IAuthService
         
         using HttpClient client = new(); // TODO: Fix socket exhaustion
         client.DefaultRequestHeaders.Add("Authorization", token);
-        client.Timeout = TimeSpan.FromSeconds(10);
         client.BaseAddress = new Uri(Url);
         
         var response = await client.PostAsync("/api/v1/Auth/Verify", null);
@@ -35,7 +34,6 @@ public class AuthService : IAuthService
             throw new HException("Invalid email or password", ExceptionType.InvalidCredentials);
         
         using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.Timeout = TimeSpan.FromSeconds(10);
         client.BaseAddress = new Uri(Url);
         
         var content = new StringContent(JsonConvert.SerializeObject(new { email, password }), Encoding.UTF8, "application/json");
@@ -53,7 +51,6 @@ public class AuthService : IAuthService
             throw new HException("Invalid email", ExceptionType.InvalidCredentials);
 
         using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.Timeout = TimeSpan.FromSeconds(10);
         client.BaseAddress = new Uri(Url);
     
         var content = new FormUrlEncodedContent(new[]
@@ -70,7 +67,6 @@ public class AuthService : IAuthService
     public async Task<bool> RecoverPassword(string email, string code, string newPassword)
     {
         using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.Timeout = TimeSpan.FromSeconds(10);
         client.BaseAddress = new Uri(Url);
         
         var content = new StringContent(JsonConvert.SerializeObject(new { Email = email, VerificationCode = code, NewPassword = newPassword }), Encoding.UTF8, "application/json");
