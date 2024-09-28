@@ -7,18 +7,21 @@ namespace Hyzen.SDK.Authentication.Services;
 
 public class AuthService : IAuthService
 {
-    private const string Url = "https://hyzen-auth.azurewebsites.net";
+    private readonly HttpClient _client = new()
+    {
+        BaseAddress = new Uri("https://hyzen-auth.azurewebsites.net"),
+        Timeout = TimeSpan.FromSeconds(60)
+    };
     
     public async Task<AuthSubject> Verify(string token)
     {
         if (string.IsNullOrEmpty(token))
             throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
         
-        using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.DefaultRequestHeaders.Add("Authorization", token);
-        client.BaseAddress = new Uri(Url);
+        _client.DefaultRequestHeaders.Clear();
+        _client.DefaultRequestHeaders.Add("Authorization", token);
         
-        var response = await client.PostAsync("/api/v1/Auth/Verify", null);
+        var response = await _client.PostAsync("/api/v1/Auth/Verify", null);
         
         if (!response.IsSuccessStatusCode)
             throw new HException("Invalid or expired token", ExceptionType.InvalidCredentials);
@@ -33,11 +36,8 @@ public class AuthService : IAuthService
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             throw new HException("Invalid email or password", ExceptionType.InvalidCredentials);
         
-        using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.BaseAddress = new Uri(Url);
-        
         var content = new StringContent(JsonConvert.SerializeObject(new { email, password }), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/api/v1/Auth/Login", content);
+        var response = await _client.PostAsync("/api/v1/Auth/Login", content);
 
         return !response.IsSuccessStatusCode ? null : JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
     }
@@ -46,16 +46,13 @@ public class AuthService : IAuthService
     {
         if (string.IsNullOrEmpty(email))
             throw new HException("Invalid email", ExceptionType.InvalidCredentials);
-
-        using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.BaseAddress = new Uri(Url);
     
         var content = new FormUrlEncodedContent(new[]
         {
             new KeyValuePair<string, string>("email", email)
         });
 
-        var response = await client.PostAsync("/api/v1/Auth/SendRecoveryEmail", content);
+        var response = await _client.PostAsync("/api/v1/Auth/SendRecoveryEmail", content);
 
         return response.IsSuccessStatusCode;
     }
@@ -63,11 +60,8 @@ public class AuthService : IAuthService
 
     public async Task<bool> RecoverPassword(string email, string code, string newPassword)
     {
-        using HttpClient client = new(); // TODO: Fix socket exhaustion
-        client.BaseAddress = new Uri(Url);
-        
         var content = new StringContent(JsonConvert.SerializeObject(new { Email = email, VerificationCode = code, NewPassword = newPassword }), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/api/v1/Auth/RecoverPassword", content);
+        var response = await _client.PostAsync("/api/v1/Auth/RecoverPassword", content);
 
         return response.IsSuccessStatusCode;
     }
