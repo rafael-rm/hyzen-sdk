@@ -38,11 +38,8 @@ public class AuthService : IAuthService
         
         var content = new StringContent(JsonConvert.SerializeObject(new { email, password }), Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/Auth/Login", content);
-        
-        if (!response.IsSuccessStatusCode)
-            throw new HException("Invalid email or password", ExceptionType.InvalidCredentials);
-        
-        return JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
+
+        return !response.IsSuccessStatusCode ? null : JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<bool> SendRecoveryEmail(string email)
