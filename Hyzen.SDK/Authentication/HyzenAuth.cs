@@ -97,4 +97,9 @@ public static class HyzenAuth
     {
         return EnsureGroup("Admin");
     }
+    
+    public static string GetBaseAddress()
+    {
+        return Service.BaseAddress;
+    }
 }

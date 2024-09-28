@@ -4,6 +4,7 @@ namespace Hyzen.SDK.Authentication.Services;
 
 public interface IAuthService
 {
+    public string BaseAddress { get; }
     public Task<AuthSubject> Verify(string token);
     public Task<LoginResponse> Login(string email, string password);
     public Task<bool> SendRecoveryEmail(string email);

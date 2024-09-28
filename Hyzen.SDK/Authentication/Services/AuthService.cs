@@ -7,12 +7,15 @@ namespace Hyzen.SDK.Authentication.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly HttpClient _client = new()
-    {
-        BaseAddress = new Uri("https://hyzen-auth.azurewebsites.net"),
-        Timeout = TimeSpan.FromSeconds(60)
-    };
+    private readonly HttpClient _client = new();
+    public string BaseAddress { get; }
     
+    public AuthService()
+    {
+        BaseAddress = "https://hyzen-auth.azurewebsites.net";
+        _client.BaseAddress = new Uri(BaseAddress);
+    }
+
     public async Task<AuthSubject> Verify(string token)
     {
         if (string.IsNullOrEmpty(token))
