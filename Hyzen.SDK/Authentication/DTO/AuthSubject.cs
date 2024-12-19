@@ -12,7 +12,23 @@ public class AuthSubject
     
     public bool HasRole(string roleKey)
     {
-        return Roles.Contains(roleKey);
+        var roleParts = roleKey.Split(':');
+        
+        if (Roles.Contains(roleKey))
+        {
+            return true;
+        }
+
+        for (int i = 0; i < roleParts.Length; i++)
+        {
+            var partialRole = string.Join(':', roleParts.Take(i + 1)) + ":*";
+            if (Roles.Contains(partialRole))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
         
     public bool HasGroup(string groupKey)
